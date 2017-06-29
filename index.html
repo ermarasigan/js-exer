@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Javascript Exercise</title>
+	<style type="text/css">
+		
+		body {
+		  background: #666;
+		  margin: 0;
+		}
+
+		canvas {
+		  position: absolute;
+		  top: 80%;
+		  left: 50%;
+		  transform: translateX(-200px);
+		}
+
+		#bg {
+			width: 100vw; 
+			height: 100vh;
+			
+			/*background: url("img/omi.gif");*/
+			background: url("img/stream.gif");
+			background-repeat: no-repeat;
+			background-size: cover;
+			/*background-position: center;*/
+			background-position: 20%;
+		}
+
+	</style>
+</head>
+<body>
+
+		<div id="bg"  >
+		<button class='btn btn-default btn-lg' type='submit' name='play' onclick='play();'>
+			Play
+		</button>
+		<canvas id="draw-pad" width="700" height="60">
+		</canvas>
+	</div>
+
+	<script type="text/javascript">
+
+		// var ords=['null'
+		// 	,'first'
+		// 	,'second'
+		// 	,'third'
+		// 	,'fourth'
+		// 	,'fifth'
+		// 	,'sixth'
+		// 	,'seventh'
+		// 	,'eighth'
+		// 	,'ninth'
+		// 	,'tenth'
+		// 	,'eleventh'
+		// 	,'twelfth'
+		// 	];
+
+		// var gifts=['null'
+		// 	,'a partridge in a pear tree'
+		// 	,'Two Turtle Doves'
+		// 	,'Three French Hens'
+		// 	,'Four Calling Birds'
+		// 	,'Five Gold Rings'
+		// 	,'Six Geese a-Laying'
+		// 	,'Seven Swans a-Swimming'
+		// 	,'Eight Maids a-Milking'
+		// 	,'Nine Ladies Dancing'
+		// 	,'Ten Lords a-Leaping'
+		// 	,'Eleven Pipers Piping'
+		// 	,'Twelve Drummers Drumming'
+		// 	];
+
+		// var l=0;
+		// var lyrics=[];
+
+		// for(i=1;i<13;i++){
+		// 	l++;
+		// 	lyrics[l] = "On the " + ords[i] + " day of Christmas";
+		// 	// console.log(lyrics[l]);
+
+		// 	l++;
+		// 	lyrics[l] = "my true love sent to me: ";
+		// 	// console.log(lyrics[l]);
+
+		// 	for (j=i; j>0; j--){
+		// 		if(i>1 && j==1){
+		// 			l++;
+		// 			lyrics[l] = "and " + gifts[j];
+		// 			// console.log(lyrics[l]);
+		// 		} else {
+		// 			l++;
+		// 			lyrics[l] = gifts[j];
+		// 			// console.log(lyrics[l]);
+		// 		}
+		// 	}
+		// }
+
+		lyrics=[0
+				,'Mary had a little lamb'
+				,'little lamb, little lamb'
+				,'Mary had a little lamb'
+				,'Its fleece as white as snow'
+		]
+
+		lyrics=['null'
+			,'When your legs don\'t work'
+			,'like they used to before'
+			,'And I can\'t sweep you' 
+			,'off of your feet'
+			,'Will your mouth still'
+			,'remember the taste of my love'
+			,'Will your eyes still'
+			,'smile from your cheeks'
+			,'And darling I will '
+			,'be loving you \'til we\'re 70'
+			,'And baby my heart '
+			,'could still fall as hard at 23'
+			,'And I\'m thinking \'bout how people fall in love in mysterious ways'
+			,'Maybe just the touch of a hand'
+			,'Oh me I fall in love with you every single day'
+			,'And I just wanna tell you I am'
+			,'So honey now'
+			,'Take me into your loving arms'
+			,'Kiss me under the light of a thousand stars'
+			,'Place your head on my beating heart'
+			,'I\'m thinking out loud'
+			,'Maybe we found love right where we are'
+		];
+
+		// shim layer with setTimeout fallback
+		window.requestAnimFrame = (function(){
+		  return  window.requestAnimationFrame       ||
+		          window.webkitRequestAnimationFrame ||
+		          window.mozRequestAnimationFrame    ||
+		          function( callback ){
+		            window.setTimeout(callback, 1000 / 60);
+		          };
+		})();
+
+		// beats per minute
+		var bpm=78;
+		
+
+		var canvas = document.getElementById('draw-pad');
+		var context = canvas.getContext('2d');
+		var x = 10; //canvas.width / 2;
+		var y = canvas.height / 2;
+		// var txt = 'On the first day of Christmas';
+		var l=1;
+		var txt = lyrics[l];
+		var w = 0;
+		var clearH = 40;
+		var clearY = 13;
+		var clearX = 8;
+
+		context.font = 'bold 38px sans-serif';
+		// textAlign aligns text horizontally relative to placement
+		context.textAlign = 'left';
+		// textBaseline aligns text vertically relative to font style
+		context.textBaseline = 'middle';
+		context.lineWidth = 4;
+		context.strokeStyle = 'black';
+
+		function runText() {
+		  // console.log('Run text', w, l);
+		  // if (w > 700) {
+		  if (w>=(1+40/bpm)*context.measureText(txt).width){
+		    context.clearRect(clearX, clearY, w, clearH);
+		    console.log(lyrics[l],context.measureText(txt).width);
+		    l++;
+		    if(l<lyrics.length){
+		    	txt=lyrics[l];
+		    } 
+		    else {
+		    	txt='';
+		    }
+		    w = 0;
+		  }
+
+		  if (w === 0) {
+		    context.fillStyle = 'lightblue';
+		    context.strokeText(txt, x, y);
+		    context.fillText(txt, x, y);
+		    context.fillStyle = 'red';
+		  }
+		  
+		  context.save();
+		  context.beginPath();
+		  context.clearRect(clearX, clearY, w, clearH);
+		  context.rect(clearX, clearY, w, clearH);
+		  context.clip();
+		  context.strokeStyle = 'white';
+		  context.strokeText(txt, x, y);
+		  context.fillText(txt, x, y);
+		  context.restore();
+		  
+		  w += (context.measureText(txt).width/bpm);
+		  // console.log(w);
+
+		  if (l < lyrics.length) {
+			requestAnimFrame(runText);
+			}
+		}
+
+		// function play() {
+			// Call function to run text animation
+			// l=1;
+			// w=0;
+			runText();
+		// }
+		
+	</script>
+
+</body>
+</html>
