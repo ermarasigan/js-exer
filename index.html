@@ -96,36 +96,35 @@
 		// 	}
 		// }
 
-		lyrics=['Mary had a little lamb'
-				,'little lamb, little lamb'
-				,'Mary had a little lamb'
-				,'Its fleece as white as snow'
-		]
+		// lyrics=['Mary had a little lamb'
+		// 		,'little lamb, little lamb'
+		// 		,'Mary had a little lamb'
+		// 		,'Its fleece as white as snow'
+		// ]
 
-		// lyrics=['null'
-		// 	,'When your legs don\'t work'
-		// 	,'like they used to before'
-		// 	,'And I can\'t sweep you' 
-		// 	,'off of your feet'
-		// 	,'Will your mouth still'
-		// 	,'remember the taste of my love'
-		// 	,'Will your eyes still'
-		// 	,'smile from your cheeks'
-		// 	,'And darling I will '
-		// 	,'be loving you \'til we\'re 70'
-		// 	,'And baby my heart '
-		// 	,'could still fall as hard at 23'
-		// 	,'And I\'m thinking \'bout how people fall in love in mysterious ways'
-		// 	,'Maybe just the touch of a hand'
-		// 	,'Oh me I fall in love with you every single day'
-		// 	,'And I just wanna tell you I am'
-		// 	,'So honey now'
-		// 	,'Take me into your loving arms'
-		// 	,'Kiss me under the light of a thousand stars'
-		// 	,'Place your head on my beating heart'
-		// 	,'I\'m thinking out loud'
-		// 	,'Maybe we found love right where we are'
-		// ];
+		lyrics=['When your legs don\'t work like they'
+			,'used to before'
+			,'And I can\'t sweep you off of your' 
+			,'feet'
+			,'Will your mouth still'
+			,'remember the taste of my love'
+			,'Will your eyes still'
+			,'smile from your cheeks'
+			,'And darling I will '
+			,'be loving you \'til we\'re 70'
+			,'And baby my heart '
+			,'could still fall as hard at 23'
+			,'And I\'m thinking \'bout how people fall in love in mysterious ways'
+			,'Maybe just the touch of a hand'
+			,'Oh me I fall in love with you every single day'
+			,'And I just wanna tell you I am'
+			,'So honey now'
+			,'Take me into your loving arms'
+			,'Kiss me under the light of a thousand stars'
+			,'Place your head on my beating heart'
+			,'I\'m thinking out loud'
+			,'Maybe we found love right where we are'
+		];
 
 		// shim layer with setTimeout fallback
 		window.requestAnimFrame = (function(){
@@ -138,8 +137,8 @@
 		})();
 
 		// beats per minute
-		// var bpm=78;
-		var bpm=122;
+		var bpm=78;
+		// var bpm=122;
 		
 
 		var canvas = document.getElementById('draw-pad');
@@ -157,6 +156,7 @@
 		context.font = 'bold 38px sans-serif';
 		// textAlign aligns text horizontally relative to placement
 		context.textAlign = 'left';
+		// context.textAlign = 'center';
 		// textBaseline aligns text vertically relative to font style
 		context.textBaseline = 'middle';
 		context.lineWidth = 4;
@@ -165,7 +165,7 @@
 		function runText() {
 		  // console.log('Run text', w, l);
 		  // if (w > 700) {
-		  if (w>=(1+10/bpm)*context.measureText(txt).width){
+		  if (w>=(1+1/bpm)*context.measureText(txt).width){
 		    context.clearRect(clearX, clearY, w, clearH);
 		    console.log(lyrics[l],context.measureText(txt).width);
 		    l++;
@@ -195,7 +195,8 @@
 		  context.fillText(txt, x, y);
 		  context.restore();
 		  
-		  w += (context.measureText(txt).width/bpm);
+		  // w += (context.measureText(txt).width/bpm);
+		  w += ((context.measureText(txt).width * bpm) / (240 * fps));
 		  // console.log(w);
 
 		  if (l < lyrics.length) {
@@ -240,7 +241,7 @@
 		function step(timestamp) {
 			// console.log(time);
 		    var time2 = new Date;
-		    var fps   = 1000 / (time2 - time);
+		    fps   = 1000 / (time2 - time);
 		    time = time2;
 			
 		    document.getElementById('test').innerHTML = fps;
