@@ -32,10 +32,9 @@
 </head>
 <body>
 
-		<div id="bg"  >
-		<button class='btn btn-default btn-lg' type='submit' name='play' onclick='play();'>
-			Play
-		</button>
+	<div id="bg"  >
+		<div id="test"></div>
+		<button id='togglebtn' class='btn btn-default btn-lg' type='submit' onclick='toggleLyrics();'>Play</button>
 		<canvas id="draw-pad" width="700" height="60">
 		</canvas>
 	</div>
@@ -97,37 +96,36 @@
 		// 	}
 		// }
 
-		lyrics=[0
-				,'Mary had a little lamb'
+		lyrics=['Mary had a little lamb'
 				,'little lamb, little lamb'
 				,'Mary had a little lamb'
 				,'Its fleece as white as snow'
 		]
 
-		lyrics=['null'
-			,'When your legs don\'t work'
-			,'like they used to before'
-			,'And I can\'t sweep you' 
-			,'off of your feet'
-			,'Will your mouth still'
-			,'remember the taste of my love'
-			,'Will your eyes still'
-			,'smile from your cheeks'
-			,'And darling I will '
-			,'be loving you \'til we\'re 70'
-			,'And baby my heart '
-			,'could still fall as hard at 23'
-			,'And I\'m thinking \'bout how people fall in love in mysterious ways'
-			,'Maybe just the touch of a hand'
-			,'Oh me I fall in love with you every single day'
-			,'And I just wanna tell you I am'
-			,'So honey now'
-			,'Take me into your loving arms'
-			,'Kiss me under the light of a thousand stars'
-			,'Place your head on my beating heart'
-			,'I\'m thinking out loud'
-			,'Maybe we found love right where we are'
-		];
+		// lyrics=['null'
+		// 	,'When your legs don\'t work'
+		// 	,'like they used to before'
+		// 	,'And I can\'t sweep you' 
+		// 	,'off of your feet'
+		// 	,'Will your mouth still'
+		// 	,'remember the taste of my love'
+		// 	,'Will your eyes still'
+		// 	,'smile from your cheeks'
+		// 	,'And darling I will '
+		// 	,'be loving you \'til we\'re 70'
+		// 	,'And baby my heart '
+		// 	,'could still fall as hard at 23'
+		// 	,'And I\'m thinking \'bout how people fall in love in mysterious ways'
+		// 	,'Maybe just the touch of a hand'
+		// 	,'Oh me I fall in love with you every single day'
+		// 	,'And I just wanna tell you I am'
+		// 	,'So honey now'
+		// 	,'Take me into your loving arms'
+		// 	,'Kiss me under the light of a thousand stars'
+		// 	,'Place your head on my beating heart'
+		// 	,'I\'m thinking out loud'
+		// 	,'Maybe we found love right where we are'
+		// ];
 
 		// shim layer with setTimeout fallback
 		window.requestAnimFrame = (function(){
@@ -140,7 +138,8 @@
 		})();
 
 		// beats per minute
-		var bpm=78;
+		// var bpm=78;
+		var bpm=122;
 		
 
 		var canvas = document.getElementById('draw-pad');
@@ -148,7 +147,7 @@
 		var x = 10; //canvas.width / 2;
 		var y = canvas.height / 2;
 		// var txt = 'On the first day of Christmas';
-		var l=1;
+		var l=0;
 		var txt = lyrics[l];
 		var w = 0;
 		var clearH = 40;
@@ -166,7 +165,7 @@
 		function runText() {
 		  // console.log('Run text', w, l);
 		  // if (w > 700) {
-		  if (w>=(1+40/bpm)*context.measureText(txt).width){
+		  if (w>=(1+10/bpm)*context.measureText(txt).width){
 		    context.clearRect(clearX, clearY, w, clearH);
 		    console.log(lyrics[l],context.measureText(txt).width);
 		    l++;
@@ -200,16 +199,58 @@
 		  // console.log(w);
 
 		  if (l < lyrics.length) {
-			requestAnimFrame(runText);
+			// requestAnimFrame(runText);
+			globalID = requestAnimFrame(runText);
+			} else {
+				var toggle = document.getElementById('togglebtn');
+				toggle.innerHTML = 'Restart';
 			}
 		}
 
-		// function play() {
+		function stopText(){
+			cancelAnimationFrame(globalID);
+		}
+
+		function toggleLyrics() {
 			// Call function to run text animation
 			// l=1;
 			// w=0;
-			runText();
-		// }
+			var toggle = document.getElementById('togglebtn');
+			switch(toggle.innerHTML) {
+			    case 'Play':
+			        runText();
+					toggle.innerHTML = 'Pause'; 
+			        break;
+			    case 'Pause':
+			        stopText();
+					toggle.innerHTML = 'Play';
+			        break;
+			    case 'Restart':
+			    	l=0;
+			    	txt=lyrics[l];
+			    	runText();
+			    	toggle.innerHTML = 'Pause'; 
+			    default:
+			        break;
+			}
+
+		}
+
+		// Compute frames per second
+		function step(timestamp) {
+			// console.log(time);
+		    var time2 = new Date;
+		    var fps   = 1000 / (time2 - time);
+		    time = time2;
+			
+		    document.getElementById('test').innerHTML = fps;
+		    window.requestAnimationFrame(step);
+		}
+
+		var time = new Date;
+		if (window.requestAnimationFrame(step)){
+			console.log('yey');
+		}
 		
 	</script>
 
