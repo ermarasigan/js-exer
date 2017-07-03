@@ -11,9 +11,9 @@
 
 		canvas {
 		  position: absolute;
-		  top: 80%;
+		  bottom: 10%;
 		  left: 50%;
-		  transform: translateX(-200px);
+		  transform: translateX(-50%);
 		}
 
 		#bg {
@@ -28,18 +28,108 @@
 			background-position: 20%;
 		}
 
+
+
 	</style>
+
+	<!-- Ukulele tab generator by pianosnake-->
+	<script src="dist/webcomponents-lite.min.js"></script>
+	<link rel="import" href="dist/uke-chord.html">
 </head>
 <body>
 
 	<div id="bg"  >
-		<div id="test"></div>
-		<button id='togglebtn' class='btn btn-default btn-lg' type='submit' onclick='toggleLyrics();'>Play</button>
-		<canvas id="draw-pad" width="700" height="60">
+		<div style="color: white" id="test"></div>
+		
+
+		<textarea id="myTextarea" rows="4" cols="50" style="font-family: sans-serif;"
+		placeholder="Type chords and lyrics in alternate lines (c l c l)"></textarea>
+		<br>
+		<input id="bpm" type="number" min=0 placeholder="bpm">
+		<button type="button" onclick="previewLyrics()">Preview</button>
+
+		<br>
+		<button id='togglebtn' class='btn btn-default btn-lg' type='submit' onclick='toggleLyrics();'>Play</button><br>
+
+		<br>
+		<input id="bpm" type="text" placeholder="Type a chord">
+		<div id="test2" style="background:red; width: 50px; height: 50px"></div>
+		<button type="submit" onclick="genTabs()">Generate uke tabs</button>
+
+		<br>
+
+		
+
+		<uke-chord id='chord1' frets='2100' size='L'  position=0 name='A'  style='background: white; padding-right: 20px; margin: 10px'></uke-chord>
+
+		<canvas id="draw-pad" width="700" height="200">
 		</canvas>
 	</div>
 
+	
+
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+  <script src="js/jquery.min.js"></script>
+
 	<script type="text/javascript">
+
+
+		function genTabs(){
+			
+			// $('#chord1').attr('frets','1311');
+
+			// var fret = $('#chord1').attr('frets');
+			// console.log(fret);
+
+			$('#test2').css('background','pink');
+			console.log('yey');
+		}
+
+		chords=[];
+		lyrics=[];
+
+		$(document).ready(function() {
+		    $("#togglebtn").hide();
+		});
+
+		function previewLyrics() {
+		    // var x = document.getElementById("myTextarea").value;
+		    // document.getElementById("demo").innerHTML = x;
+		    var lines = [];
+		    chords=[];
+			lyrics=[];
+		    
+		    var ctr=0;
+		    $.each($('#myTextarea').val().split(/\n/), function (i, line) {
+		    	console.log(ctr);
+		        // if (line) {
+		        // 	console.log(line)
+		        //     lines.push(line);
+		            
+		        // } else {
+		        //     lines.push("");
+		        // }
+		        if(ctr%2==0){
+		            chords.push(line);
+		        } else {
+		        	lyrics.push(line);
+		        }
+		        ctr++;
+		    });
+		    // console.log(lines);
+		    console.log(chords);
+		    console.log(lyrics);
+
+		    if(chords>''&&lyrics>''){
+
+		     $("#togglebtn").show();
+		    } else {
+		     $("#togglebtn").hide();
+		    }
+
+		}
+
+
 
 		// var ords=['null'
 		// 	,'first'
@@ -102,29 +192,46 @@
 		// 		,'Its fleece as white as snow'
 		// ]
 
-		lyrics=['When your legs don\'t work like they'
-			,'used to before'
-			,'And I can\'t sweep you off of your' 
-			,'feet'
-			,'Will your mouth still'
-			,'remember the taste of my love'
-			,'Will your eyes still'
-			,'smile from your cheeks'
-			,'And darling I will '
-			,'be loving you \'til we\'re 70'
-			,'And baby my heart '
-			,'could still fall as hard at 23'
-			,'And I\'m thinking \'bout how people fall in love in mysterious ways'
-			,'Maybe just the touch of a hand'
-			,'Oh me I fall in love with you every single day'
-			,'And I just wanna tell you I am'
-			,'So honey now'
-			,'Take me into your loving arms'
-			,'Kiss me under the light of a thousand stars'
-			,'Place your head on my beating heart'
-			,'I\'m thinking out loud'
-			,'Maybe we found love right where we are'
-		];
+		// lyrics=['When your legs don\'t work like they'
+		// 	,'used to before'
+		// 	,'And I can\'t sweep you off of your' 
+		// 	,'feet'
+		// 	,'Will your mouth still'
+		// 	,'remember the taste of my love'
+		// 	,'Will your eyes still'
+		// 	,'smile from your cheeks'
+		// 	,'And darling I will '
+		// 	,'be loving you \'til we\'re 70'
+		// 	,'And baby my heart '
+		// 	,'could still fall as hard at 23'
+		// 	,'And I\'m thinking \'bout how people fall in love in mysterious ways'
+		// 	,'Maybe just the touch of a hand'
+		// 	,'Oh me I fall in love with you every single day'
+		// 	,'And I just wanna tell you I am'
+		// 	,'So honey now'
+		// 	,'Take me into your loving arms'
+		// 	,'Kiss me under the light of a thousand stars'
+		// 	,'Place your head on my beating heart'
+		// 	,'I\'m thinking out loud'
+		// 	,'Maybe we found love right where we are'
+		// ];
+
+		// lyrics=['Wise   men \t say, \t \t only \t'
+		// ,'fools   rush \t in, \t \t but'
+		// ,'I \t can\'t \t help \t falling in'
+		// ,'love with you \t \t'
+		// ,' '
+		// ,'你不乖有时'
+		// ,'还会作怪'
+		// ,'但你不坏'
+		// ,'只是不装可爱'
+		// ]
+
+		// chords=['D \t\t\t\t\t\t\t F#m \t\t\t\t\t\t\t Bm'
+		// ,'G             D \t\t\t\t\t A \t\t\t\t\t\ G'
+		// ,'A \t\t\t\t\t Bm \t\t\t\t\t G'
+		// ,'D \t\t\t\t\t A \t\t\t\t\t D' 
+		// ]
 
 		// shim layer with setTimeout fallback
 		window.requestAnimFrame = (function(){
@@ -137,23 +244,25 @@
 		})();
 
 		// beats per minute
-		var bpm=78;
+		// var bpm=78;
+		// var bpm = 42;
 		// var bpm=122;
 		
 
 		var canvas = document.getElementById('draw-pad');
 		var context = canvas.getContext('2d');
 		var x = 10; //canvas.width / 2;
-		var y = canvas.height / 2;
+		// var y = canvas.height / 2;
+		var y = 170;
 		// var txt = 'On the first day of Christmas';
-		var l=0;
-		var txt = lyrics[l];
+		// var l=0;
+		// var txt = lyrics[l];
 		var w = 0;
-		var clearH = 40;
-		var clearY = 13;
+		var clearH = 200;
+		var clearY = 0;
 		var clearX = 8;
 
-		context.font = 'bold 38px sans-serif';
+		context.font = 'bold 50px sans-serif';
 		// textAlign aligns text horizontally relative to placement
 		context.textAlign = 'left';
 		// context.textAlign = 'center';
@@ -165,8 +274,9 @@
 		function runText() {
 		  // console.log('Run text', w, l);
 		  // if (w > 700) {
-		  if (w>=(1+1/bpm)*context.measureText(txt).width){
-		    context.clearRect(clearX, clearY, w, clearH);
+		  if (w>=(1+2/bpm)*context.measureText(txt).width){
+		    // context.clearRect(clearX, clearY, w, clearH);
+		    context.clearRect(clearX, clearY, 2*w, clearH);
 		    console.log(lyrics[l],context.measureText(txt).width);
 		    l++;
 		    if(l<lyrics.length){
@@ -194,12 +304,23 @@
 		  context.strokeText(txt, x, y);
 		  context.fillText(txt, x, y);
 		  context.restore();
+
+
+		  
 		  
 		  // w += (context.measureText(txt).width/bpm);
 		  w += ((context.measureText(txt).width * bpm) / (240 * fps));
 		  // console.log(w);
 
 		  if (l < lyrics.length) {
+
+
+		  	// chords
+		  context.fillStyle = 'darkblue';
+		    context.strokeText(chords[l], x, 100);
+		    context.fillText(chords[l], x, 100);
+		    context.fillStyle = 'red';
+
 			// requestAnimFrame(runText);
 			globalID = requestAnimFrame(runText);
 			} else {
@@ -217,8 +338,11 @@
 			// l=1;
 			// w=0;
 			var toggle = document.getElementById('togglebtn');
+			bpm=$('#bpm').val();
 			switch(toggle.innerHTML) {
 			    case 'Play':
+			    	l=0;
+			    	txt=lyrics[l];
 			        runText();
 					toggle.innerHTML = 'Pause'; 
 			        break;
@@ -252,6 +376,11 @@
 		if (window.requestAnimationFrame(step)){
 			console.log('yey');
 		}
+
+
+		
+
+
 		
 	</script>
 
